@@ -1,0 +1,28 @@
+{
+	"API": {
+		"telegram": {
+			"api_key": "here goes your api keu",
+			"group_id": "here goes your group id"
+		},
+		"public_ip": {
+			"api_url": "https://ident.me",
+			"file": "/opt/tsn/config/latestip.ip"
+		}
+	},
+	"settings": {
+		"general": {
+			"startup": true,
+			"shutdown": [
+				true,
+				"disabled"
+			],
+			"newip": [
+				true,
+				60
+			]
+		},
+		"ssh": {
+			"newcon": true
+		}
+	}
+}

@@ -1,0 +1,13 @@
+[Unit]
+Description=Notify shutdown via Telegram Server Notifications
+Requires=multi-user.target network-online.target
+After=multi-user.target network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/usr/sbin/tsn startup
+ExecStop=/usr/sbin/tsn shutdown
+
+[Install]
+WantedBy=default.target
