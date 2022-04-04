@@ -69,3 +69,9 @@ TSN provides a command-line tool for sending messages and updating configuration
 
 #### SSH
 * *new_con*: Send notification on new connection
+
+## ✅ TODO
+- [x] Create a CLI interface
+- [x] Create a startup/stop daemon
+- [ ] Create an installation script
+- [ ] Implement SFTP support
