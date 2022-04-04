@@ -1,9 +1,12 @@
-# Telegram Server Notifications (TSN)
+# 📫 Telegram Server Notifications (TSN)
+
+## What is TSN?
+TSN is a linux application that notifies you about your server status via Telegram using the Telegram API and Telegram bots, TSN is capable of notifying you about the server being turned on, shutted down or rebooted, new SSH connections being made, changes in public IP addreses, and more..., this is configurable via /etc/tsn.conf (symbolic link to /opt/tsn/config/config.json) and 'tsm' command line tool (/usr/sbin/tsm -> /opt/tsm/tsm.sh)
 
 ## ⚠️ Security concerns
 This folder and all the scripts MUST be located out of reach of non-sudo users becasue some of this scripts will be runned by 'cron' at startup will root priviliges, any alteration to this files could result in a security hazard.
 
-## Dependencies
+## 🔍 Dependencies
 - python3
 - cron
 - network-manager
