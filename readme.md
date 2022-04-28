@@ -1,5 +1,8 @@
 # Telegram Server Notifications (TSN)
 
+## What is TSN?
+TSN is a notification service via Telegram, it connects directly to a Telegram Bot and sends notifications that are posted into a Telegram group, you can notify the server turning on/off, new SSH connections, public ip address, changes in public address, automatic server shutdown, etc...
+
 ## ⚠️ Security concerns
 This folder and all the scripts MUST be located out of reach of non-sudo users becasue some of this scripts will be runned by 'cron' at startup will root priviliges, any alteration to this files could result in a security hazard.
 
