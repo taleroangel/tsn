@@ -49,7 +49,7 @@ try:
     # If new ip is different
     if ip_addr != new_ip:
         save_ip_file(IP_FILE, new_ip)
-        os.system(f'{tools.TSN_BIN} notify newip')
+        os.system(f'{tools.TSN_BIN} notify ip_new now')
 
 except:
     create_ip_file(IP_FILE)

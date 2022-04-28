@@ -11,6 +11,7 @@ function enable {
     ln -s /opt/tsn/services/tsnd.service /lib/systemd/system/tsnd.service
     systemctl enable tsnd
     systemctl daemon-reload
+	systemctl start tsnd
 }
 
 function disable {

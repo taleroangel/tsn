@@ -5,5 +5,5 @@
 if [[ ! -z ${SSH_CONNECTION} ]]; then
     # Run the python script
     stringarray=($SSH_CONNECTION);
-    /usr/sbin/tsn session ${stringarray[0]};
+    /usr/sbin/tsn session ssh ${stringarray[0]};
 fi

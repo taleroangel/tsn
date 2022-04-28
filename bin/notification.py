@@ -1,68 +1,94 @@
 #!/usr/bin/env python3
 
-# Script that manages sending notifications to Telegram
-# Checks within configuration file if enabled
-# Also contains all messages
+""" Script that manages sending notifications to Telegram
+Checks within configuration file if enabled
+Also contains all messages
 
 # AVAILABLE COMMANDS
 # -- config.json
-# startup
-# shutdown
-# newip
-# ssh_newcon [ip]
-# -- shell onlu
-# getip
-# message [message]
-# alert [message]
+- startup now
+- shutdown now
+- ip_new now
+- ssh [ip]
+# Shell commands
+- ip_show now
+- message [message]
+- alert [message]
+
+"""
 
 # Libraries
 import sys
 import tools
 import telegram
+import cmd
 
-# Main code
+# Get the configuration files
 conf = tools.get_config()
 
 
-def notification_newconnection(protocol: str, ipaddr: str):
+def connection(protocol: str, ipaddr: str) -> str:
     return f'🔌 ({protocol.upper()}) Detected new connection\nFrom IP: *{ipaddr}*'
 
 
-# defined inside config.json
-try:
-    # Startup
-    if (sys.argv[1] == 'startup') and conf["settings"]["general"]["startup"]:
-        telegram.send(f'🟢 Server is active!\nListening for connections...')
-        telegram.send(
-            f'🌎 Server\'s public address is: *{tools.get_publicip()}*')
+def message(message: str) -> str:
+    return f'🖥️ *Server message:* {message}'
 
-        # Shutdown
-    elif (sys.argv[1] == 'shutdown') and conf["settings"]["general"]["shutdown"][0]:
-        telegram.send(
-            f'🔴 Server is shutting down!\nConnections will be closed soon...')
+
+def alert(message: str) -> str:
+    return f'⚠️ *ALERT:* {message}'
+
+
+try:
+    # !! List of available commands
+    commands = [
+        # * General
+        # Statup command
+        cmd.Command('startup', [
+            lambda x: telegram.send_message(
+                f'🟢 Server is active!\nListening for connections...'),
+        ], conf["settings"]["general"]["startup"]),
+
+        # Shutdown command
+        cmd.Command('shutdown', [
+            lambda x: telegram.send_message(
+                f'🔴 Server is shutting down!\nConnections will be closed soon...')
+        ], conf["settings"]["general"]["shutdown"]),
 
         # IP change
-    elif (sys.argv[1] == 'newip') and conf["settings"]["general"]["newip"][0]:
-        telegram.send(
-            f'⚡ Server\'s IP address has changed!\nNew IP address is: *{tools.get_publicip()}*')
+        cmd.Command('ip_new', [
+            lambda x: telegram.send_message(
+                f'⚡ Server\'s IP address has changed!\nNew IP address is: *{tools.get_publicip()}*')
+        ], conf["settings"]["general"]["newip"]),
+
+        # Send a message
+        cmd.Command('message', [
+            lambda x: telegram.send_message(message(" ".join(x)))
+        ]),
+
+        # Send an alert
+        cmd.Command('alert', [
+            lambda x: telegram.send_message(alert(" ".join(x)))
+        ]),
+
+        # Get IP
+        cmd.Command('ip_show', [
+            lambda x: telegram.send_message(
+                f'🌎 Server\'s public address is: *{tools.get_publicip()}*')
+        ]),
+
+        # * Protocols
 
         # SSH connection
-    elif (sys.argv[1] == 'ssh_newcon') and conf["settings"]["ssh"]["newcon"]:
-        telegram.send(notification_newconnection('ssh', sys.argv[2]))
+        cmd.Command('ssh', [
+            lambda x: telegram.send_message(connection('ssh', sys.argv[2]))
+        ], conf["services"]["ssh"])
+    ]
 
-    # shell available commands
-        # Show IP
-    elif sys.argv[1] == 'getip':
-        telegram.send(
-            f'🌎 Server\'s public address is: *{tools.get_publicip()}*')
+    #! END
 
-        # Show message
-    elif sys.argv[1] == 'message':
-        telegram.send(f'🖥️ Server\'s message: {sys.argv[2]}')
+    # Parse commands
+    cmd.interpret_command(sys.argv[1], commands, sys.argv[2:])
 
-		# Show alert
-    elif sys.argv[1] == 'alert':
-        telegram.send(f'⚠️ ALERT: {sys.argv[2]}')
-
-except:
-    tools.print_err("Invalid 'notification module' usage")
+except Exception:
+    tools.print_err("Incorrect usage of 'notification.py'")

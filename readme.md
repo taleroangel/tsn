@@ -1,12 +1,9 @@
-# 📫 Telegram Server Notifications (TSN)
-
-## What is TSN?
-TSN is a linux application that notifies you about your server status via Telegram using the Telegram API and Telegram bots, TSN is capable of notifying you about the server being turned on, shutted down or rebooted, new SSH connections being made, changes in public IP addreses, and more..., this is configurable via /etc/tsn.conf (symbolic link to /opt/tsn/config/config.json) and 'tsm' command line tool (/usr/sbin/tsm -> /opt/tsm/tsm.sh)
+# Telegram Server Notifications (TSN)
 
 ## ⚠️ Security concerns
 This folder and all the scripts MUST be located out of reach of non-sudo users becasue some of this scripts will be runned by 'cron' at startup will root priviliges, any alteration to this files could result in a security hazard.
 
-## 🔍 Dependencies
+## Dependencies
 - python3
 - cron
 - network-manager
@@ -23,13 +20,11 @@ TSN provides a command-line tool for sending messages and updating configuration
 ### Available commands
 > **tsn notify [command]**
 > Sends a message to Telegram server
->> #### Commands that work according to config.json
 >> * _startup_: Show startup message
 >> * _shutdown_: Show shutdown message
->> * _newip_: Show newip message
->> * _ssh_newcon [ip]_: Show new SSH connection
->> #### shell only commands
->> * _getip_: Shows current ip address
+>> * _ip_new_: Show newip message
+>> * _ssh_ _[ip]_: Show new SSH connection
+>> * _ip_show_: Shows current ip address
 >> * _message [message]_: Send a generic message
 >> * _alert [message]_: Send an alert
 
@@ -67,11 +62,5 @@ TSN provides a command-line tool for sending messages and updating configuration
 * *shutdown*: [Send notification on shutdown, Scheduled shutdown time in 'hh:ss', write 'disable' for disabling it]
 * *newip*: [Send notification when the public ip changes, time in minutes until next check]
 
-#### SSH
-* *new_con*: Send notification on new connection
-
-## ✅ TODO
-- [x] Create a CLI interface
-- [x] Create a startup/stop daemon
-- [ ] Create an installation script
-- [ ] Implement SFTP support
+### Services Section
+* *ssh: Send notification on new SSH connection

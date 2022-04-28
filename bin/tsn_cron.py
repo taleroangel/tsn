@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 
+"""Alter the system's crontab
+"""
+
 import re
 import tools
 
-CRON_FILE = '/etc/crontab'
+CRONFILE = '/etc/crontab'
 
 
 def alter_crontab(filename: str, inputstr: str):
@@ -25,6 +28,7 @@ def alter_crontab(filename: str, inputstr: str):
 
 def check_tsn_compatible(filename: str):
     """Check if crontab file is 'tsn_cron' compatible, if not, makes it tsn compatible"""
+
     file_in = open(filename, 'r')
     data = file_in.read()
     file_in.close()
@@ -40,13 +44,14 @@ def check_tsn_compatible(filename: str):
 
 
 # Main code
+# Fetch settings
 config = tools.get_config()
 
 # Store rules in this string
 cron_rules: str = "\n"
 
-# Check if cron contains settings
-check_tsn_compatible(CRON_FILE)
+# Check if crontab is TSN compatible
+check_tsn_compatible(CRONFILE)
 
 # Read SHUTDOWN time schedule
 if bool(re.match(r'[0-2][0-9]:[0-5][0-9]', config["settings"]["general"]["shutdown"][1])):
@@ -60,5 +65,5 @@ if config["settings"]["general"]["newip"][0]:
     cron_rules += f'*/{minutes} * * * * root /usr/sbin/tsn updateip\n'
 
 # Alter crontab
-alter_crontab(CRON_FILE, cron_rules)
+alter_crontab(CRONFILE, cron_rules)
 print(f"Crontab rules updated:\n{cron_rules}")
