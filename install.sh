@@ -40,13 +40,25 @@ function install {
 	cp /etc/crontab /etc/crontab.bak
 	echo "INFO> '/etc/crontab' backup created in '/etc/crontab.bak'"
     # Copy contents of TSN into OPT
-    cp `pwd`/* /opt/tsn/
+    cp -r `pwd`/* /opt/tsn/
     # Create required symbolic liks
     ln -s /opt/tsn/script/tsn_profile.sh /etc/profile.d/tsn_profile.sh
     ln -s /opt/tsn/tsn.sh /usr/sbin/tsn
     ln -s /opt/tsn/config/config.json /etc/tsn/config.json
     # Enable service
     /usr/sbin/tsn service enable
+    # Change permissions
+    chown -R root:root /opt/tsn
+    chmod -R 0700 /opt/tsn
+    chmod 0755 /opt/tsn
+    chmod -R 0755 /opt/tsn/script
+    chmod 0755 /opt/tsn/tsn.sh
+    chown -R root:root /etc/tsn
+    chmod 0755 /etc/tsn/config.json
+    # Make binaries available
+    chmod -R 0755 /opt/tsn/bin
+    #BUG:#!! CONFIGURATION FILES ARE EXPOSED !!#
+    chmod -R 0755 /opt/tsn/config
     # Show message
     echo "TSN has been installed on your system, please modify '/etc/tsn/config.json' and then run 'sudo tsn update-conf'"
 }
@@ -79,5 +91,6 @@ if [[ $operation == [iI] ]]
 then
 	install
 elif [[ $operation == [Rr] ]]
+then
 	remove
 fi
