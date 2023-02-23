@@ -5,10 +5,11 @@
 
 import re
 import os
+import sys
 import tools
 
-config = tools.get_config()
-IP_FILE = config["API"]["public_ip"]["file"]
+config = tools.load_settings()
+IP_FILE = config["api"]["ip"]["file"]
 
 
 def save_ip_file(filename: str, ip: str):
@@ -20,7 +21,7 @@ def save_ip_file(filename: str, ip: str):
 def create_ip_file(filename: str):
     file = open(filename, 'x')
     file.close()
-    save_ip_file(filename, tools.get_publicip())
+    save_ip_file(filename, tools.public_ip())
 
 
 def load_ip_file(filename: str):
@@ -35,21 +36,25 @@ def load_ip_file(filename: str):
         return None
 
 
-# Main Code
-
 try:
     # Load the IP
     ip_addr = load_ip_file(IP_FILE)
-    new_ip = tools.get_publicip()
+    new_ip = tools.public_ip()
 
-    # If IP not valid, recreate ID (rare)
+    # If IP not valid, create the file with the new IP
     if ip_addr == None:
         save_ip_file(IP_FILE, new_ip)
 
     # If new ip is different
-    if ip_addr != new_ip:
+    elif ip_addr != new_ip:
         save_ip_file(IP_FILE, new_ip)
-        os.system(f'{tools.TSN_BIN} notify newip')
+        os.system(f'{tools.TSN_BIN} notify new_ip {new_ip}')
+
+    if len(sys.argv) > 1 and sys.argv[1] == 'show':
+        os.system(f'{tools.TSN_BIN} notify public_ip {new_ip}')
+
 
 except:
     create_ip_file(IP_FILE)
+    os.system(f'{tools.TSN_BIN} notify new_ip {tools.public_ip()}')
+    tools.print_error("IP file didn't exist, created.")

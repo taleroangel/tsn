@@ -1,5 +1,5 @@
 [Unit]
-Description=Notify shutdown via Telegram Server Notifications
+Description=Notify startup and shutdown via Telegram Server Notifications
 Requires=multi-user.target network-online.target
 After=multi-user.target network-online.target
 

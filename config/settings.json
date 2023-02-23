@@ -1,0 +1,22 @@
+{
+	"api": {
+		"telegram": {
+			"api_key": "",
+			"group_id": ""
+		},
+		"ip": {
+			"url": "https://ident.me",
+			"file": "/opt/tsn/config/latest.ip"
+		}
+	},
+	"settings": {
+		"ip": 60
+	},
+	"notifications": {
+		"startup": "🟢 Server is active!\nListening for connections...",
+		"shutdown": "🔴 Server is shutting down!\nConnections will be closed soon...",
+		"public_ip": "🌎 Server's public address is: *{}*",
+		"new_ip": "⚡ Server's IP address has changed!\nNew IP address is: *{}*",
+		"session": "🔌 New connection detected from: {}"
+	}
+}

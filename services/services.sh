@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 if [[ $EUID != "0" ]]
 then
     echo "You must run this command as sudo"
@@ -11,6 +12,7 @@ function enable {
     ln -s /opt/tsn/services/tsnd.service /lib/systemd/system/tsnd.service
     systemctl enable tsnd
     systemctl daemon-reload
+    systemctl start tsnd
 }
 
 function disable {
