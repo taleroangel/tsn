@@ -11,9 +11,19 @@ This folder and all the scripts must be located out of reach of non-sudo users b
 - cron
 - network-manager
 - systemd
+- PAM
 
 ## 🌎️ Installation
-/etc/tsn.conf and /usr/sbin/tsn
+### Basic Installation
+1. Install TSN files inside /opt/tsn
+2. Create the following symbolic links: **(use `tsn install` for automatic installation)**
+	* /opt/tsn/tsn.sh &rarr; /usr/sbin/tsn
+	* /opt/tsn/config/settings.json &rarr; /etc/tsn.conf
+
+### SSH Login Notification
+1. Create a symbolic link from **/opt/tsn/script/ssh.sh &rarr; /etc/ssh/tsn.sh**
+2. Add the following line to **/etc/pam.d/sshd**\
+	```session    optional    pam_exec.so seteuid /etc/ssh/tsn.sh```
 
 ## 🧑‍🔬 TSN shell
 TSN provides a command-line tool for sending messages and updating configurations defined in ['config.json'](#🧰-json-configuration-file-configjson)
@@ -58,10 +68,31 @@ TSN provides a command-line tool for sending messages and updating configuration
 > Show information about TSN
 
 ## 🧰 tsn.conf (Configuration file)
-### 'api' Section
-#### telegram
-* *api_key*: Telegram bot API key
-* *group_id*: Chat ID where the bot will message to
-#### public_ip
-* *api_url*: API URL for getting public IP. ("https://ident.me", by default)
-* *file*: File in which previous IP will be stored ("/opt/tsn/config/latest.ip", by default)
+```json
+{
+	"api": {
+		// Setup your Telegram API
+		"telegram": {
+			"api_key": "",
+			"group_id": ""
+		},
+		"ip": {
+			"url": "https://ident.me",
+			"file": "/opt/tsn/config/latest.ip"
+		}
+	},
+	"settings": {
+		"ip": 60 // Time in minutes for ip checking
+	},
+
+	//Notifications section specifies 'tsn notify' options
+	"notifications": {
+		"startup": "Personalize messages!",
+		"shutdown": "Use brackets '{}' to embed parameters",
+		"public_ip": "You can use markdown syntaxis *{}*",
+		"new_ip": "...",
+		"session": "...",
+		...
+	}
+}
+```
