@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-
+#!/usr/bin/python3
 # Script that manages sending notifications to Telegram
 
 # Libraries

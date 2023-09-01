@@ -1,5 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-if [ $PAM_TYPE == "open_session" ]; then
-	/usr/sbin/tsn session $SSH_CONNECTION
+# If PAM_TYPE is login
+if [ "$PAM_TYPE" = "open_session" ]; then
+	exec /usr/sbin/tsn session $SSH_CONNECTION
 fi
